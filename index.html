@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Enimga</title>
+  </head>
+  <body>
+
+    <h1 id="output">
+      output
+    </h1>
+    <script type="text/javascript">
+    const chargrid = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
+
+    function chartoint(character){
+      return chargrid.indexOf(character)%26;
+    }
+
+    function inttochar(integer){
+      return chargrid[integer];
+    }
+
+
+    function classicstring(string){
+      var tmp = ""
+      for (let i = 0; i< string.length;i++){
+          tmp+=string[i];
+          if ((i+1)%5===0){
+              tmp+=" ";
+            }
+            }
+            return tmp;
+  }
+
+  class Steckbrett{
+    constructor(paare){
+        this.verdrahtung = Array.from({length: 26},(item,index) => item = index + 1);
+        for (let i = 0; i <paare.length/2;i++){
+            this.verdrahtung[chartoint(paare[2*i])] = chartoint(paare[2*i+1]) + 1;
+            this.verdrahtung[chartoint(paare[2*i+1])] = chartoint(paare[2*i]) + 1;
+          }
+          }
+}
+
+
+
+  class Walze{
+    constructor(nummer,position){
+        this.position = position;
+        if(nummer==='1'){
+            this.verdrahtung=[5,11,13,6,12,7,4,17,22,26,14,20,15,23,25,8,24,21,19,16,1,9,2,18,3,10];
+            this.übertragskerbe=[17];
+          }
+
+        if(nummer==='2'){
+            this.verdrahtung=[1,10,4,11,19,9,18,21,24,2,12,8,23,20,13,3,17,7,26,14,16,25,6,22,15,5];
+            this.übertragskerbe=[5];
+          }
+
+        if(nummer==='3'){
+            this.verdrahtung=[2,4,6,8,10,12,3,16,18,20,24,22,26,14,25,5,9,23,7,1,11,13,21,19,17,15];
+            this.übertragskerbe=[22];
+          }
+
+        if(nummer==='4'){
+            this.verdrahtung=[5,19,15,22,16,26,10,1,25,17,21,9,18,8,24,12,14,6,20,7,11,4,3,13,23,2];
+            this.übertragskerbe=[10];
+          }
+
+        if(nummer==='5'){
+            this.verdrahtung=[22,26,2,18,7,9,20,25,21,16,19,4,14,8,12,24,1,23,13,10,17,15,6,5,3,11];
+            this.übertragskerbe=[26];
+          }
+
+        if(nummer==='6'){
+            this.verdrahtung=[10,16,7,22,15,21,13,6,25,17,2,5,14,8,26,18,4,11,1,19,24,12,9,3,20,23];
+            this.übertragskerbe=[13,26];
+          }
+
+        if(nummer==='7'){
+            this.verdrahtung=[14,26,10,8,7,18,3,24,13,25,19,23,2,15,21,6,1,9,22,12,16,5,11,17,4,20];
+            this.übertragskerbe=[13,26];
+          }
+
+        if(nummer==='8'){
+            this.verdrahtung=[6,11,17,8,20,12,24,15,3,2,10,19,16,4,26,18,1,13,5,23,14,9,21,25,7,22];
+            this.übertragskerbe=[13,26];
+          }
+
+        if(nummer==='A'){
+            this.verdrahtung=[5,10,13,26,1,12,25,24,22,2,23,6,3,18,17,21,15,14,20,19,16,9,11,8,7,4];
+          }
+        if(nummer==='B'){
+            this.verdrahtung=[25,18,21,8,17,19,12,4,16,24,14,7,15,11,13,9,5,2,6,26,3,23,22,10,1,20];
+          }
+        if(nummer==='C'){
+            this.verdrahtung=[6,22,16,10,9,1,15,25,5,4,18,26,24,23,7,3,20,11,21,17,19,2,14,13,8,12];
+          }
+          }
+    }
+
+
+    class Enigma{
+      constructor(w1,position1,w2,position2,w3,position3,umkehrwalze,steckbrettpaare = []){
+          this.walzen = [new Walze(w1,chartoint(position1)),new Walze(w2,chartoint(position2)),new Walze(w3,chartoint(position3)),new Walze(umkehrwalze,0)];
+          this.steckbrett = new Steckbrett(steckbrettpaare);
+        }
+
+      walzenschalten(){
+          if(this.walzen[0].übertragskerbe.includes(this.walzen[0].position+1)){
+              this.walzen[1].position=(this.walzen[1].position+1)%26;
+            }
+          else{
+              if(this.walzen[1].übertragskerbe.includes(this.walzen[1].position+1)){
+                  this.walzen[1].position=(this.walzen[1].position+1)%26;
+                }
+            }
+          if(this.walzen[1].übertragskerbe.includes(this.walzen[1].position+1)){
+              this.walzen[2].position=(this.walzen[2].position+1)%26;
+            }
+          this.walzen[0].position=(this.walzen[0].position+1)%26;
+        }
+
+
+
+      schlüsselnChar(integer){
+          this.walzenschalten()
+          var curint = integer;
+          console.log(curint);
+          curint = (this.steckbrett.verdrahtung[curint]-1+26)%26;
+          for (let i = 0; i<3;i++){
+              curint = (this.walzen[i].verdrahtung[(curint+this.walzen[i].position)%26]-1-this.walzen[i].position+26)%26;
+            }
+          console.log(curint);
+          curint = this.walzen[3].verdrahtung[curint]-1;
+          for (let i = 0; i<3;i++){
+              curint = (this.walzen[2-i].verdrahtung.indexOf((curint+this.walzen[2-i].position)%26+1)-this.walzen[2-i].position+26)%26;
+            }
+          curint = (this.steckbrett.verdrahtung.indexOf(curint+1)+26)%26;
+          console.log(curint);
+          return curint;
+        }
+
+     schlüsselnstr(string){
+          var newstring = "";
+          for (let i = 0; i< string.length;i++){
+            if(chargrid.includes(string[i])){
+              newstring += inttochar(this.schlüsselnChar(chartoint(string[i])));
+            }
+            }
+          return newstring;
+        }
+
+        }
+
+
+
+
+
+      var Enigma1 = new Enigma("1","K","2","B","3","Y","B");
+      alert(Enigma1.schlüsselnstr("TEST"));
+
+    </script>
+  </body>
+</html>
