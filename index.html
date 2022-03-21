@@ -3,6 +3,25 @@
   <head>
     <meta charset="utf-8">
     <title>Enimga</title>
+    <img src="ButtonPress.png" alt="" id="ButtonPress" width="10%" height="10%">
+    <canvas id="canvas" width="0" height="0">
+
+    </canvas>
+    <script type="text/javascript">
+      var canvas = document.getElementById("canvas");
+      var ctx = canvas.getContext("2d");
+      var ButtonPress = document.getElementById("ButtonPress");
+      var ButtonPress2 = document.getElementById("ButtonPress");
+      canvas.height = window.innerHeight;
+      canvas.width = window.innerWidth;
+      ctx.fillStyle = "#FF0000";
+      ctx.fillRect(1000,10, 100,100);
+      ctx.drawImage(ButtonPress, 10, 10);
+      ctx.drawImage(ButtonPress2, 50, 20);
+
+
+    </script>
+
   </head>
   <body>
 
@@ -158,7 +177,7 @@
 
 
       var Enigma1 = new Enigma("1","K","2","B","3","Y","B");
-      alert(Enigma1.schlüsselnstr("TEST"));
+      alert(Enigma1.schlüsselnstr("TESTo"));
 
     </script>
   </body>
